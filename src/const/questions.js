@@ -52,7 +52,7 @@ ritorni solo quelli con meno di 22 anni che hanno fatto almeno 4 acquisti. Senza
 	{
 		id: "d9bc5974-5901-45f0-9d8b-ed689985de8b",
 		title: "Sort function",
-		description: "Dato lo stesso array della domanda precedente scrivere la funzione 'sort' che lo ordina per numero di acquisti, in caso di parità prima i più giovani prima",
+		description: "Dato lo stesso array della domanda precedente scrivere la funzione 'sort' che lo ordina in modo decrescente per numero di acquisti, in caso di parità prima i più giovani prima",
 		import: true,
 		test: module =>
 		{
