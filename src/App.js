@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './App.css';
 import { AnswersProvider } from './context/Answers';
 import ArrayPage from './pages/ArrayPage';
+import AsyncPage from './pages/AsyncPage';
 import ObjectCreation from './pages/ObjectCreation';
 import TestPage from './pages/TestPage';
 import TypeCoercionPage from './pages/TypeCoercionPage';
@@ -24,6 +25,10 @@ function App() {
     {
       path: "objects",
       element: <ObjectCreation></ObjectCreation>
+    },
+    {
+      path: "async",
+      element: <AsyncPage></AsyncPage>,
     },
   ],)
   return (
@@ -52,6 +57,11 @@ function App() {
                   onClick={() => router.navigate("/objects")}
                 >
                   Objects
+                </Sidebar.Item>
+                <Sidebar.Item
+                  onClick={() => router.navigate("/async")}
+                >
+                  Async
                 </Sidebar.Item>
               </Sidebar.ItemGroup>
             </Sidebar.Items>

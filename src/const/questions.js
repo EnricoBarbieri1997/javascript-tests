@@ -358,3 +358,140 @@ Nota: Un elemento HTML può essere creato così SNIPPET`,
 		}
 	}
 ]
+
+export const asyncProgramming = [
+	{
+		id: "bd9389a4-251d-4b0c-a26e-d990b212299d",
+		title: "Callback",
+		description: "Storicamente javascript gestiva l'asincronismo attraverso i 'callback'. Ogni volta che una funzione doveva svolgere un task lungo aggiungeva un parametro alla fine che consisteva in una funzione da richiamare una volta finita l'operazione. Per esempio la libreria per leggere i file di nodejs usa ancora questo paradigma SNIPPET scrivi ed esporta una funzione chiamata 'l33t' che riceve in input il contenuto del file e ritorna il contenuto con tutte le 'e' sostituite dal carattere 3. La funzione verrà chiamata da readFile automaticamente. Codice che verrà eseguito: SNIPPET",
+		snippets: [
+			`
+	function readFile(path, options, callback) { }
+`,
+			`readFile('percorso/del/file', {}, l33t)`
+		],
+		import: true,
+		test: module =>
+		{
+			const l33t = module.l33t
+			const str = "elite"
+			const strL33t = l33t(str)
+			return strL33t === str.replaceAll("e", "3")
+		}
+	},
+	{
+		id: "a5191978-76e3-405c-888e-c2bc1902c8a2",
+		title: "Dall'altra parte",
+		description: "Questa volta sei tu che devi scrivere una funzione che fa uso di callback. Javascript non ha il concetto di 'wait' o 'pause', javascript non è bloccante, non puoi interrompere l'esecuzione. Javascript ha però due funzioni per gestire questi casi 'setInterval' e 'setTimeout'. Scrivi ed esporta una funzione 'veryLongTask' che prende in input un numero e un callback. La funzione aspetta 2 secondi e poi richiama il callback passandogli il doppio del numero precedentemente preso in input. (il risultato della domanda arriverà dopo 2 secondi)",
+		import: true,
+		test: async module =>
+		{
+			return new Promise((resolve, reject) =>
+			{
+				const time = (new Date()).getTime()
+				module.veryLongTask(4, (i) =>
+				{
+					if((new Date().getTime() > time + 2000) && i === 8)
+					{
+						resolve(true)
+					}
+					else
+					{
+						resolve(false)
+					}
+				})
+			})
+		}
+	},
+	{
+		id: "045c730d-48b7-49c4-b551-e3e253142428",
+		title: "Il nuovo modo: le Promise",
+		description: "Scrivi ed esporta una funzione con questa forma SNIPPET 'promise' è una funzione che ci metterà un po' a eseguire e quindi non ritorna il risultato ma ritorna una promise, gli altri due parametri sono rispettivamente i callback per quando tutto è andato bene e quello per quando c'è stato un errore. La funzione deve chiamare la promise passata come primo parametro e richiamare il primo callback nel caso il task sia riuscito e il secondo nel caso sia fallito",
+		snippets: [
+			`
+			export function usingPromises(promise, callbackOk, callbackError) {}
+`
+		],
+		import: true,
+		test: module =>
+		{
+			return new Promise((resolveMain, mainreject) =>
+			{
+				const f = module.usingPromises
+				let doneOne = false
+				let validOk = false
+				let validKo = false
+				f(new Promise((resolve, reject) => {resolve(true)}), () =>
+				{
+					validOk = true
+					if(doneOne) resolveMain(validOk && validKo)
+					else doneOne = true
+				}, () => {})
+				f(new Promise((resolve, reject) => {reject(true)}), () => {}, () =>
+				{
+					validKo = true
+					if(doneOne) resolveMain(validOk && validKo)
+					else doneOne = true
+				})
+				setTimeout(() => resolveMain(false), 100)
+			})
+		}
+	},
+	{
+		id: "dff6f5a0-a84e-4659-a25d-68d3b64a6274",
+		title: "Promise: polyfill",
+		description: "Le Promise non sono state un aggiunta a livello di architettura ma solo di API. È possibile implementare lo stesso funzionamento anche con le API vecchie. Crea ed esporta una funzione/costruttore di nome 'MyPromise' che abbia la stessa interfaccia e funzionalità delle Promise normali senza usare la funzione/costruttore 'Promise'",
+		import: true,
+		test: module =>
+		{
+			return new Promise((mainResolve, mainReject) =>
+			{
+				let resolved = false
+				let rejected = false
+				let doneFirst = false
+				const firstOrResolve = () =>
+				{
+					if(doneFirst) mainResolve(resolved && rejected)
+					else doneFirst = true
+				}
+	
+				const a = new module.MyPromise((resolve, reject) =>
+				{
+					resolve(3)
+				})
+				a.then((i) =>
+				{
+					if(i === 3) resolved = true
+					firstOrResolve()
+				})
+				const b = new module.MyPromise((resolve, reject) =>
+				{
+					reject(3)
+				})
+				b.catch((i) =>
+				{
+					if(i === 3) rejected = true
+					firstOrResolve()
+				})
+
+				setTimeout(() => {mainResolve(false)}, 100)
+			})
+		}
+	},
+	{
+		id: "faf4dc54-cf83-4974-ace5-b8ac9c0dfea3",
+		title: "Il modo elegante",
+		description: "Le Promise sono ancora tutt'ora il modo di gestire l'asincronia in Javascript. Gli ultimi standard del linguaggio hanno però introdotto una nuova sintassi 'async' e 'await' per lavorare con le promise. Qualsiasi funzione dichiarata async verrà in automatico inserita dentro una promise e il codice che viene dopo un await verrà in automatico inserito dentro il 'then', il 'catch' deve essere effettuato con un try/catch. Scrivi ed esporta una funzione/costruttore 'FileTransformer' che prende in input una funzione con questo formato: SNIPPET e ritorna un oggetto con un solo metodo SNIPPET che legge il contenuto di un file usando la funzione passata al costruttore e ritorna una stringa con tutte le lettere in maiuscolo",
+		snippets: [
+			"async function fileReader(path) {} //ritorna una stringa",
+			"asyncfunction transform(path) {}",
+		],
+		import: true,
+		test: async module =>
+		{
+			const str = "test"
+			const r = new module.FileTransformer(() => str)
+			return (await r.transform()) === str.toUpperCase()
+		}
+	}
+]

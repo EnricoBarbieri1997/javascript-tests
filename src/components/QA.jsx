@@ -41,6 +41,7 @@ export default function QA({className, namespace, question}) {
 		}
 		catch(e)
 		{
+			console.log("catched")
 			console.error(e)
 			setResult(false)
 		}
