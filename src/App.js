@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './App.css';
 import { AnswersProvider } from './context/Answers';
 import ArrayPage from './pages/ArrayPage';
+import ObjectCreation from './pages/ObjectCreation';
 import TestPage from './pages/TestPage';
 import TypeCoercionPage from './pages/TypeCoercionPage';
 
@@ -19,7 +20,11 @@ function App() {
     {
       path: "/coercion",
       element: <TypeCoercionPage></TypeCoercionPage>
-    }
+    },
+    {
+      path: "objects",
+      element: <ObjectCreation></ObjectCreation>
+    },
   ],)
   return (
     <div className="App container py-10 h-full">
@@ -42,6 +47,11 @@ function App() {
                   onClick={() => router.navigate("/coercion")}
                 >
                   Type Coercion
+                </Sidebar.Item>
+                <Sidebar.Item
+                  onClick={() => router.navigate("/objects")}
+                >
+                  Objects
                 </Sidebar.Item>
               </Sidebar.ItemGroup>
             </Sidebar.Items>

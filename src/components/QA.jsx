@@ -24,9 +24,9 @@ export default function QA({className, namespace, question}) {
 		if(questionObject.snippets === undefined || questionObject.snippets.length === 0) return questionObject.description
 		let snippetBase = 0
 		let description = questionObject.description
-		let newDescritpion = ""
+		let newDescritpion = description
 		do {
-			newDescritpion = description.replace("SNIPPET", "<span class='whitespace-pre-wrap'>" + Prism.highlight(questionObject.snippets[snippetBase], Prism.languages.javascript, "javascript")) + "</pre>"
+			newDescritpion = newDescritpion.replace("SNIPPET", "<span class='whitespace-pre-wrap'>" + Prism.highlight(questionObject.snippets[snippetBase], Prism.languages.javascript, "javascript")) + "</span>"
 			snippetBase++
 		} while (newDescritpion !== description && snippetBase < questionObject.snippets.length)
 

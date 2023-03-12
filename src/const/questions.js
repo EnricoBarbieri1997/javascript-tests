@@ -1,5 +1,5 @@
 import { sameArray } from "../helpers/arrays"
-import { users } from "./mock"
+import { products, users } from "./mock"
 
 export const tests = [
 	{
@@ -225,4 +225,136 @@ export const typeCoercion = [
 			return eval(escapedInput) === res
 		}
 	},
+]
+
+export const objectCreation = [
+	{
+		id: "6d6a7e89-42c6-4542-a40e-17bc6b543c9d",
+		title: "Oggetti senza classi",
+		description: "In Javascript gli oggetti non hanno bisogno di un tipo associato, possono essere istanziati e basta. Usando la sintassi SNIPPET Crea un oggetto, chiamato 'prodotto', con le proprietà 'price' e 'quantity'",
+		snippets: [
+			"export var prodotto = "
+		],
+		import: true,
+		test: (module) =>
+		{
+			const obj = module.prodotto
+			return obj.hasOwnProperty("price") && obj.hasOwnProperty("quantity")
+		}
+	},
+	{
+		id: "3e07eee5-fdc2-4fd6-8087-43c0cd8dc6a9",
+		title: "Prototipi primi passi",
+		description: "Crea un oggetto come nella domanda precedente ma esporta anche un oggetto 'abbonamento' che abbia una proprietà in più 'expirationDate' e usi il primo come prototipo per accedere alle altre, non le definisca da solo.",
+		import: true,
+		test: (module) =>
+		{
+			const obj = module.abbonamento
+			const notOwnProperties = !obj.hasOwnProperty("price") && !obj.hasOwnProperty("quantity")
+			return notOwnProperties && obj.hasOwnProperty("expirationDate") && obj.price !== undefined && obj.quantity !== undefined
+		}
+	},
+	{
+		id: "c2be73db-1b73-4c39-ae2f-7d8f66001511",
+		title: "Protipi e funzioni",
+		description: "Crea ed esporta un oggetto base 'prodotto' con un metodo 'buy' che scala la 'quantity' di 1. Crea ed esporta 2 oggetti: 'Quadro' e 'Scala' che hanno come prototipo 'prodotto'",
+		import: true,
+		test: (module) =>
+		{
+			const parent = module.prodotto
+			const obj1 = module.Quadro
+			const obj2 = module.Scala
+			const arePrototypesCorrect = parent.isPrototypeOf(obj1) && parent.isPrototypeOf(obj2)
+			const q1 = obj1.quantity
+			const q2 = obj2.quantity
+			obj1.buy()
+			obj2.buy()
+			const areQuantitiesCorrect = q1 === obj1.quantity + 1 && q2 === obj2.quantity + 1
+			return arePrototypesCorrect && areQuantitiesCorrect
+		}
+	},
+	{
+		id: "978aea1c-6955-4255-94b8-5349a3758c90",
+		title: "Oggetti e event listener",
+		description: `Ho una lista di prodotti SNIPPET
+Esportare una funzione 'toButtons' che prende in input la lista di prodotti e ritorna una lista di pulsanti la cui proprietà 'onClick' (non l'addEventListener) richiama la funzione buy del prodotto corrispondente.
+Nota: Un elemento HTML può essere creato così SNIPPET`,
+		snippets: [
+			`
+				const prodotti = [
+					{
+						price: 23.99,
+						quantity: 12,
+						buy: function(){...},
+					},
+					{
+						price: 12.99,
+						quantity: 12,
+						buy: function(){...},
+					},
+					{
+						price: 49.50,
+						quantity: 12,
+						buy: function(){...},
+					},
+					{
+						price: 8.60,
+						quantity: 12,
+						buy: function(){...},
+					},
+				]
+			`,
+			'var button = document.createElement("BUTTON")',
+		],
+		import: true,
+		test: (module) =>
+		{
+			const toButtons = module.toButtons
+			const buttons = toButtons(products)
+			let valid = true
+			buttons.forEach((element, index) =>
+			{
+				if(products[index] !== element.onClick()) valid = false
+			})
+
+			return valid
+		}
+	},
+	{
+		id: "4533f9e1-2d5b-476e-b8d2-8559cb15ef4f",
+		title: "La funzione Object.setPrototypeOf",
+		description: `Questa funzione predefinita prende in input due oggetti e imposta il secondo come prototipo del primo. Esportare una funzione 'setPrototypeOf' che faccia lo stesso (senza usare la funzione predefinita)`,
+		import: true,
+		test: (module) =>
+		{
+			const a = {}
+			const b = {}
+			module.setPrototypeOf(a, b)
+			return b.isPrototypeOf(a)
+		}
+	},
+	{
+		id: "d4a6868f-55b5-4996-9663-9453d58c5a34",
+		title: "La parola chiave new",
+		description: `Questa parola chiave crea un nuovo oggetto partendo da una funzione costruttore. Esportare una funzione SNIPPET con un comportamento anologo`,
+		snippets: [
+			`
+			export function nuovoOggetto(costruttore, arrayParametri)
+			{
+				...
+			}
+`
+		],
+		import: true,
+		test: (module) =>
+		{
+			function Prodotto(name)
+			{
+				this.name = name
+			}
+
+			const a = module.nuovoOggetto(Prodotto, ["prova"])
+			return Prodotto.prototype.isPrototypeOf(a) && a.name === "prova"
+		}
+	}
 ]
