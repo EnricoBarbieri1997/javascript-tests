@@ -5,7 +5,6 @@ import { AnswersProvider } from './context/Answers';
 import ArrayPage from './pages/ArrayPage';
 import AsyncPage from './pages/AsyncPage';
 import ObjectCreation from './pages/ObjectCreation';
-import TestPage from './pages/TestPage';
 import TypeCoercionPage from './pages/TypeCoercionPage';
 
 function App() {
@@ -13,10 +12,6 @@ function App() {
     {
       path: "/",
       element: <ArrayPage/>
-    },
-    {
-      path: "/test",
-      element: <TestPage></TestPage>
     },
     {
       path: "/coercion",
@@ -31,7 +26,7 @@ function App() {
       element: <AsyncPage></AsyncPage>,
     },
   ], {
-    basename: process.env.APP_BASE_PATH || '/',
+    basename: process.env.PUBLIC_URL || '/',
   })
   return (
     <div className="App container py-10 h-full">
@@ -41,27 +36,22 @@ function App() {
             <Sidebar.Items>
               <Sidebar.ItemGroup>
                 <Sidebar.Item
-                  onClick={() => router.navigate("/test")}
-                >
-                  Test
-                </Sidebar.Item>
-                <Sidebar.Item
-                  onClick={() => router.navigate("/")}
+                  onClick={() => router.navigate(process.env.PUBLIC_URL + "/")}
                 >
                   Arrays
                 </Sidebar.Item>
                 <Sidebar.Item
-                  onClick={() => router.navigate("/coercion")}
+                  onClick={() => router.navigate(process.env.PUBLIC_URL + "/coercion")}
                 >
                   Type Coercion
                 </Sidebar.Item>
                 <Sidebar.Item
-                  onClick={() => router.navigate("/objects")}
+                  onClick={() => router.navigate(process.env.PUBLIC_URL + "/objects")}
                 >
                   Objects
                 </Sidebar.Item>
                 <Sidebar.Item
-                  onClick={() => router.navigate("/async")}
+                  onClick={() => router.navigate(process.env.PUBLIC_URL + "/async")}
                 >
                   Async
                 </Sidebar.Item>

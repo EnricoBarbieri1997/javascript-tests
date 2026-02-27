@@ -33,7 +33,6 @@ jobs:
       - name: Build app
         env:
           DISABLE_ESLINT_PLUGIN: true
-          APP_BASE_PATH: ${{ github.event.repository.name == format('{0}.github.io', github.repository_owner) && '' || format('/{0}', github.event.repository.name) }}
         run: npm run build
 
       - name: Upload Pages artifact
