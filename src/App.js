@@ -30,7 +30,9 @@ function App() {
       path: "async",
       element: <AsyncPage></AsyncPage>,
     },
-  ],)
+  ], {
+    basename: process.env.PUBLIC_URL || '/',
+  })
   return (
     <div className="App container py-10 h-full">
       <AnswersProvider>
