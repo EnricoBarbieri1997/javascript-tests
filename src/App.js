@@ -31,7 +31,7 @@ function App() {
       element: <AsyncPage></AsyncPage>,
     },
   ], {
-    basename: process.env.PUBLIC_URL || '/',
+    basename: process.env.APP_BASE_PATH || '/',
   })
   return (
     <div className="App container py-10 h-full">
